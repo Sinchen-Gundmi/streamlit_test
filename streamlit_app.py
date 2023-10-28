@@ -1,3 +1,5 @@
+import streamlit
+
 streamlit.title('Whats for Breakfast?')
 streamlit.header('Breakfast Menu') 
 streamlit.text('Omega 3 & Blueberry Oatmeal') 
