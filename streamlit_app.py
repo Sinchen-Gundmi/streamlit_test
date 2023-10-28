@@ -1,3 +1,3 @@
 import streamlit
 
-streamlit.tite('This is a title')
+streamlit.title('This is a title')
