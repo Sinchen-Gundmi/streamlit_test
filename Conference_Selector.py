@@ -4,32 +4,43 @@ import hashlib
 import time
 import pandas as pd
 
-def temperature_to_city(temperature):
-    cities = {
-        "Houston": (29.7604, -95.3698),
-        "Chicago": (41.8781, -87.6298),
-        "Atlanta": (33.7490, -84.3880),
-        "New Jersey": (40.7357, -74.1724),  # Using Newark for New Jersey
-        "Dallas": (32.7767, -96.7970)
-    }
-    if temperature < 50 or temperature > 75:
-        return None, "Temperature out of range. Please enter a temperature between 50 and 75.", None
+# City coordinates for mapping
+city_locations = {
+    "Denver": (39.7392, -104.9903),
+    "McLean": (38.9339, -77.1773),
+    "Washington DC": (38.9072, -77.0369),
+    "Hoboken": (40.7433, -74.0288),
+    "Iselin": (40.5754, -74.3222),
+    "Chicago": (41.8781, -87.6298),
+    "Atlanta": (33.7490, -84.3880),
+    "Dallas": (32.7767, -96.7970),
+    "Houston": (29.7604, -95.3698)
+}
 
-    # Simple hash function to distribute temperatures evenly across cities
+def temperature_to_city(temperature):
+    cities = list(city_locations.keys())
+    if temperature < 25 or temperature > 70:
+        return None, "Temperature out of range. Please enter a temperature between 25 and 70."
+
+    # Adjusting hash function for a wider range and ensuring distribution
     hash_val = int(hashlib.sha256(str(temperature).encode()).hexdigest(), 16)
-    city_names = list(cities.keys())
-    index = hash_val % len(city_names)
-    city_name = city_names[index]
-    return city_name, "", cities[city_name]
+    index = hash_val % len(cities)
+    return cities[index], ""
+
+def plot_city_on_map(city):
+    if city in city_locations:
+        location = city_locations[city]
+        map_data = pd.DataFrame([location], columns=['lat', 'lon'])
+        st.map(map_data, zoom=4)
+    else:
+        st.error("City location not found.")
 
 # Streamlit UI
 def run_app():
-    st.title("🌍 Workshop Venue Selector")
-    
-    # Use columns to center the input form
-    col1, col2, col3 = st.columns([1,2,1])
-    with col2:
-        temperature = st.number_input("Temperature in Boston (°F)", min_value=50, max_value=75, value=62, step=1)
+    st.title("🌍 All Hands Venue Selector")
+
+    # Input for temperature
+    temperature = st.slider("Temperature (°F)", min_value=25, max_value=70, value=25, step=1)
 
     if st.button("Select Venue"):
         with st.spinner('Calculating...'):
@@ -40,20 +51,18 @@ def run_app():
                 time.sleep(1)
             placeholder.empty()
 
-            # Display result and map
-            city_name, error, coords = temperature_to_city(temperature)
-            if city_name:
-                st.markdown(f"<h1 style='text-align: center; color: green;'>{city_name}</h1>", unsafe_allow_html=True)
-                # Display the map
-                df = pd.DataFrame([coords], columns=['lat', 'lon'])
-                st.map(df)
+            # Determine city and display result
+            city, error = temperature_to_city(temperature)
+            if city:
+                st.markdown(f"<h1 style='text-align: center; color: green;'>{city}</h1>", unsafe_allow_html=True)
+                plot_city_on_map(city)
             else:
                 st.error(error)
     else:
         # Instruction
-        st.write("Enter the current temperature and click 'Select Venue' to find out where the next All Hands will be held!")
+        st.write("Adjust the temperature and click 'Select Venue' to find out where the next All Hands will be held!")
 
-    # Enhancements: Add some CSS for styling globally
+    # CSS for styling
     st.markdown(
         """
         <style>
