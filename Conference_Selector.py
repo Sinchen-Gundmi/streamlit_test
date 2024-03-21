@@ -39,7 +39,7 @@ def run_app():
     st.title("🌍 All Hands Venue Selector")
 
     # Input for temperature
-    temperature = st.slider("Current Temperature (°F) of Boston", min_value=25, max_value=70, value=25, step=1)
+    temperature = st.slider("Current Temperature (°F) of Boston\nBlahblahblah", min_value=25, max_value=70, value=25, step=1)
 
     if st.button("Select Venue"):
         with st.spinner('Calculating...'):
