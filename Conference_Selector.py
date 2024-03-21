@@ -4,17 +4,17 @@ import hashlib
 import time
 import pandas as pd
 
-# City coordinates for mapping
+# City coordinates for mapping, including latitude, longitude, and a suitable zoom level for each city
 city_locations = {
-    "Denver": (39.7392, -104.9903),
-    "McLean": (38.9339, -77.1773),
-    "Washington DC": (38.9072, -77.0369),
-    "Hoboken": (40.7433, -74.0288),
-    "Iselin": (40.5754, -74.3222),
-    "Chicago": (41.8781, -87.6298),
-    "Atlanta": (33.7490, -84.3880),
-    "Dallas": (32.7767, -96.7970),
-    "Houston": (29.7604, -95.3698)
+    "Denver": {"coords": (39.7392, -104.9903), "zoom": 10},
+    "McLean": {"coords": (38.9339, -77.1773), "zoom": 11},
+    "Washington DC": {"coords": (38.9072, -77.0369), "zoom": 11},
+    "Hoboken": {"coords": (40.7433, -74.0288), "zoom": 13},
+    "Iselin": {"coords": (40.5754, -74.3222), "zoom": 13},
+    "Chicago": {"coords": (41.8781, -87.6298), "zoom": 10},
+    "Atlanta": {"coords": (33.7490, -84.3880), "zoom": 10},
+    "Dallas": {"coords": (32.7767, -96.7970), "zoom": 10},
+    "Houston": {"coords": (29.7604, -95.3698), "zoom": 10}
 }
 
 def temperature_to_city(temperature):
@@ -29,9 +29,10 @@ def temperature_to_city(temperature):
 
 def plot_city_on_map(city):
     if city in city_locations:
-        location = city_locations[city]
+        location = city_locations[city]["coords"]
+        zoom_level = city_locations[city]["zoom"]
         map_data = pd.DataFrame([location], columns=['lat', 'lon'])
-        st.map(map_data, zoom=4)
+        st.map(map_data, zoom=zoom_level)
     else:
         st.error("City location not found.")
 
@@ -40,7 +41,7 @@ def run_app():
     st.title("🌍 All Hands Venue Selector")
 
     # Input for temperature
-    temperature = st.slider("Temperature (°F)", min_value=25, max_value=70, value=25, step=1)
+    temperature = st.slider("Current Temperature (°F) of Boston", min_value=25, max_value=70, value=25, step=1)
 
     if st.button("Select Venue"):
         with st.spinner('Calculating...'):
