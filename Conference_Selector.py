@@ -42,7 +42,7 @@ def run_app():
     temperature = st.slider("Current Temperature (°F) of Boston", min_value=25, max_value=70, value=25, step=1)
 
     # Line explaining the temperature mapping, in a smaller font
-    st.markdown("<span style='font-size: 0.8em;'>The current temperature is mathematically mapped to one of the potential cities, ensuring an even and consistent distribution.</span>", unsafe_allow_html=True)
+    st.markdown("<span style='font-size: 0.99em;'>The current temperature is mathematically mapped to one of the potential cities, ensuring an even and consistent distribution.</span>", unsafe_allow_html=True)
 
     if st.button("Select Venue"):
         with st.spinner('Calculating...'):
