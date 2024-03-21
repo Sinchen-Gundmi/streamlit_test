@@ -10,9 +10,9 @@ city_locations = {
     "McLean": {"coords": (38.9339, -77.1773), "zoom": 11},
     "Hoboken": {"coords": (40.7433, -74.0288), "zoom": 13},
     "Chicago": {"coords": (41.8781, -87.6298), "zoom": 10},
-    "Atlanta": {"coords": (33.7490, -84.3880), "zoom": 10},
     "Houston": {"coords": (29.7604, -95.3698), "zoom": 10},
     "Dallas": {"coords": (32.7767, -96.7970), "zoom": 10},
+    "Atlanta": {"coords": (33.7490, -84.3880), "zoom": 10}
 }
 
 def temperature_to_city(temperature):
